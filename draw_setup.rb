@@ -1,16 +1,14 @@
 class Object
-    def is_number
+    def is_number #function to check if user input number
       to_f.to_s == to_s || to_i.to_s == to_s
     end
   end
 def draw_example
-    # @arr=Array.new()
     x= 180
     y= 100
     for i in 0..5
-    #   a=Button_choice.new
-      $ar[i].x_position=x
-      $ar[i].y_position=y
+      @ar[i].x_position=x
+      @ar[i].y_position=y
       y+=60
       if i ==2
         x+=200
@@ -18,8 +16,8 @@ def draw_example
       end
     end
     for id in 0..5
-      draw_box( $ar[id].x_position, $ar[id].y_position,100,50)
-      draw_text_box( $ar[id].name, $ar[id].x_position, $ar[id].y_position,100,50)
+      draw_box( @ar[id].x_position, @ar[id].y_position,100,50)
+      draw_text_box( @ar[id].name, @ar[id].x_position, @ar[id].y_position,100,50)
     end
   end
   
@@ -38,11 +36,11 @@ def draw_example
     draw_text_box('Submit',center_box(100),320,100,50)
   end
   def draw_bg(choice)
-    Gosu.draw_rect($ar[choice].x_position,$ar[choice].y_position,$ar[choice].width,$ar[choice].height, @bg, ZOrder::MIDDLE, mode=:default)
+    Gosu.draw_rect(@ar[choice].x_position,@ar[choice].y_position,@ar[choice].width,@ar[choice].height, @bg, ZOrder::MIDDLE, mode=:default)
 end
   def check_area(mouse_x, mouse_y)
     for i in 0..5
-      if $ar[i].check_place(mouse_x, mouse_y)
+      if @ar[i].check_place(mouse_x, mouse_y)
         choice=i
         return i
       end

@@ -1,8 +1,8 @@
 def draw_percent
     sum_expt=0
     sum_sp=0
-    y=60
-    $ar.each do |n|
+    y=70
+    @ar.each do |n|
         draw_box(130,y+20,350,40)
         if n.money_spent>n.expected
         @input_font.draw("#{n.name}: #{'%.1f' % n.money_spent}$ out of #{'%.1f' % n.expected}$(TOO MUCH!) ", 130, y, ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
@@ -15,7 +15,19 @@ def draw_percent
         sum_expt+=n.expected
         sum_sp+=n.money_spent
     end
-    @button_font.draw("You spent #{'%.1f' % sum_sp}$ out of #{'%.1f' % sum_expt}$ for this month", center_x("You spent #{'%.1f' % sum_sp}$ out of #{'%.1f' % sum_expt}$ for this month",@button_font,WIN_WIDTH), 10, ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
+    @button_font.draw("You spent #{'%.1f' % sum_sp}$ out of #{'%.1f' % sum_expt}$ for this month", center_x("You spent #{'%.1f' % sum_sp}$ out of #{'%.1f' % sum_expt}$ for this month",@button_font,WIN_WIDTH), 35, ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
+    @button_title.draw( "$#{'%.1f' % (sum_expt-sum_sp)} left",center_x("$#{'%.1f' % (sum_expt-sum_sp)} left",  @button_title,WIN_WIDTH),2,ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
+end
+def check_area_history
+    x=130
+    y=70
+   for i in 0..5
+    if mouse_x>= x and mouse_x <=x+350 and mouse_y >=y+20 and mouse_y <= y+60
+        return i
+    end
+    y+=70
+   end
+   return nil
 end
 def draw_mail
     @button_font.draw("Please enter your mail to receive the report of this month spending",center_x('Please enter your mail to receive the report of this month spending',@button_font,WIN_WIDTH), 80, ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
@@ -34,4 +46,20 @@ end
 REGEX_PATTERN = /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/
 def is_email_valid? email
     email =~REGEX_PATTERN
+end
+def draw_history(id)
+    @ar[id].name
+    @button_title.draw(@ar[id].name,center_x(@ar[id].name,@button_title,WIN_WIDTH),10, ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
+    @button_font.draw("History of update",60, 50,ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
+    @button_title.draw("$",WIN_WIDTH-75, 50,ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
+    draw_line(40, 75, Gosu::Color::BLACK, WIN_WIDTH-40, 75, Gosu::Color::BLACK, ZOrder::TOP, mode=:default)
+    count=@ar[id].history.length
+    x= 50
+    y=90
+    for i in 0..(count-1)
+        @email_font.draw(@ar[id].history[i].time_trans,x,y,ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK)
+        @email_font.draw(@ar[id].history[i].amount,  WIN_WIDTH-80, y,ZOrder::TOP, 1.0, 1.0, Gosu::Color::BLACK  )
+        draw_line(40, y+30, Gosu::Color::BLACK, WIN_WIDTH-40, y+30, Gosu::Color::BLACK, ZOrder::TOP, mode=:default)
+        y+=40
+    end
 end

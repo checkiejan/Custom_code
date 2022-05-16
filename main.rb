@@ -1,11 +1,10 @@
 require 'csv'
 require './graphic.rb'
-class Item_list
-    attr_accessor :name, :money_spent, :expected
-    def initialize (name,money_spent,expected)
-        @name= name
-        @money_spent= money_spent
-        @expected= expected
+class Item_history
+    attr_accessor :time_trans, :amount
+    def initialize (time,amount)
+        @time_trans=time #time of the update
+        @amount=amount  #amount of the update
     end
 end
 
@@ -21,21 +20,32 @@ def read_csv(path)
     end
     return arr
 end
-def calc_percentage(t)
-    arr=Array.new()
-    for i in 0..(t.length-1)
-        tmp=t[i].money_spent/t[i].expected
-        arr<<tmp
+def read_txt(arr)
+    time=Time.new()
+    a_file=File.new("data/history#{time.month}.txt",'r')
+    for i in 0..5
+        count=a_file.gets.to_i
+        for j in 0..(count-1)
+            tmp_item=Item_history.new(a_file.gets,a_file.gets.to_f)
+            arr[i].history << tmp_item
+        end
     end
-    return arr
 end
-def add_new_item(arr)
-    puts "Name the catergory:"
-    name=gets.chomp
-    puts "Your expected budget: "
-    expected=gets.chomp.to_f
-    tmp=Item_list.new(name,0.0,expected)
-    arr<<tmp
+def write_txt(arr)
+    time=Time.new()
+    a_file=File.new("data/history#{time.month}.txt",'w')
+    for i in 0..5
+        count=arr[i].history.length
+        a_file.puts(count)
+        if count >0
+        for j in 0..(count-1)
+            a_file.puts(arr[i].history[j].time_trans)
+            a_file.puts(arr[i].history[j].amount)
+        end
+    end
+    end
+    a_file.close()
+    
 end
 def write_csv(arr,path)
     ar=Array.new()
@@ -48,19 +58,13 @@ def write_csv(arr,path)
     end
     File.write(path, ar.map(&:to_csv).join)
 end
-# def get_example
-#     return read_csv('data/example.csv')
-# end
+
 def check_first
     time=Time.new()
-    tmp=read_csv("data/budget#{time.month}.csv")
-    if File.file?("data/budget#{time.month-1}.csv")
+    if File.file?("data/budget#{time.month-1}.csv") or File.file?("data/budget#{time.month}.csv")
         return false
     end
-    if tmp[0]== nil
-        return true
-    end
-    return false
+    return true
 end
 def new_month
     time=Time.new()
@@ -75,6 +79,10 @@ def new_month
     end
     File.write("data/budget#{time.month}.csv", ar.map(&:to_csv).join)
 end
-$ar=read_csv('data/example.csv')
+def main
+    ar=read_csv('data/example.csv')
 
-AppWindow.new.show()
+    app=AppWindow.new(ar)
+    app.show()
+end
+main
