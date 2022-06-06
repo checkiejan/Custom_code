@@ -4,7 +4,7 @@ class Item_history
     attr_accessor :time_trans, :amount
     def initialize (time,amount)
         @time_trans=time #time of the update
-        @amount=amount  #amount of the update
+        @amount=amount  #amount of the updateadmi
     end
 end
 
@@ -26,7 +26,7 @@ def read_txt(arr)
     for i in 0..5
         count=a_file.gets.to_i
         for j in 0..(count-1)
-            tmp_item=Item_history.new(a_file.gets,a_file.gets.to_f)
+            tmp_item=Item_history.new(a_file.gets,a_file.gets.to_f) # store the history for that category
             arr[i].history << tmp_item
         end
     end
@@ -61,16 +61,16 @@ end
 
 def check_first
     time=Time.new()
-    if File.file?("data/budget#{time.month-1}.csv") or File.file?("data/budget#{time.month}.csv")
+    if File.file?("data/budget#{time.month-1}.csv") or File.file?("data/budget#{time.month}.csv") # check the existence of last month and this month file
         return false
     end
     return true
 end
 def new_month
     time=Time.new()
-    temp=read_csv("data/budget#{time.month-1}.csv")
+    temp=read_csv("data/budget#{time.month-1}.csv") # create new file for new month
     ar=Array.new()
-    for i in temp
+    for i in temp # take the expected money of last month and put that in the new month, set all spent money to 0
       tmp=Array.new()
       tmp.append(i.name)
       tmp.append(0.0)

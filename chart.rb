@@ -38,6 +38,7 @@ def create_chart
           type: :bar,
           name: 'Expected'
   }
+  #set this month for the graph
   time = Time.new
   month=time.strftime("%B")
   month.upcase

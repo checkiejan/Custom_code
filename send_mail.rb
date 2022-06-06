@@ -1,9 +1,9 @@
 require 'net/smtp'
-
+# sollution to send email is inspired by https://mailtrap.io/blog/ruby-send-email/
 def send_mail(email)
 filename = "chart/line_chart.html"
 file_content = File.read(filename)
-encoded_content = [file_content].pack("m")   # base64
+encoded_content = [file_content].pack("m")  # encode the file
 time = Time.new
 month=time.strftime("%B")
 month.upcase
@@ -40,7 +40,7 @@ END_OF_MESSAGE
 message = part1 + part2 + part3 
 
   Net::SMTP.start('smtp.gmail.com',
-    587,
+    587, # port google mail server
     'smtp.gmail.com',
     'hantrangia03@gmail.com','hungdeptrai', :login) do |smtp|
 smtp.send_message message, 'hantrangia03@gmail.com',
